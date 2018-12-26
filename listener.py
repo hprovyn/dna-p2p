@@ -8,20 +8,30 @@ Created on Tue Dec 25 07:16:09 2018
 import sys
 import py2p
 import time
+import pandas as pd
 
 myport = 4591
+debug_level = 0
+peerAddy = ""
+peerPort = ""
 
-outaddy = ""
-
-if len(sys.argv) > 1:
-    outaddy = sys.argv[1]
+def readConfig():
+    a = pd.read_csv("config.txt")
+    params = a["param"]
+    vals = a["value"]
+    myportIdx = params.index("port")
+    peerAddyIdx = params.index("peerAddress")
+    peerPortIdx = params.index("peerPort")
+    debugIdx = params.index("debug")
+    myport = int(vals[myportIdx])
+    peerAddy = vals[peerAddyIdx]
+    peerPort = int(vals[peerPortIdx])
+    debug_level = int(vals[debugIdx])
     
-print(outaddy)
+conn = py2p.MeshSocket("0.0.0.0", myport, debug_level=debug_level, prot=py2p.base.Protocol('mesh', 'SSL'))
 
-conn = py2p.MeshSocket("0.0.0.0", myport, debug_level=5, prot=py2p.base.Protocol('mesh', 'SSL'))
-
-if outaddy != "":
-    conn.connect(outaddy, 4591)
+if peerAddy != "":
+    conn.connect(peerAddy, peerPort)
 
 done = False
 
