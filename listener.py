@@ -30,6 +30,9 @@ SNPs = ["Z631","M241", "L283"]
 REPLY_TYPE = 2
 QUERY_TYPE = 0
 
+yesses = 0
+received = 0
+sent = False
 while done is not True:    
     msg = conn.recv()
     if msg is not None:
@@ -44,13 +47,16 @@ while done is not True:
                 msg.reply("NO")
             if snp == "shutdown":
                 done = True
-            else:
-                time.sleep(5)
-                print('attempting to disconnect', msg.sender)
-                handler = conn.routing_table.get(msg.sender)
-                print(handler)
-                if handler is not None:
-                    conn.disconnect(handler)
-                    print ("STATUS", conn.status)
             
+            print ("STATUS", conn.status)
+        if msgtype == REPLY_TYPE:
+            print(msg)
+            if msg.packets[1]=="YES":
+                yesses += 1
+            received += 1
+            print("received ", yesses, " YES", " out of ", received)
+
+    if sent == False:
+        conn.send("M241")
+        sent = True
 conn.close()
