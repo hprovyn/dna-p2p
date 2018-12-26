@@ -3,3 +3,4 @@ port,4591
 peerAddress,192.168.178.80
 peerPort,4591
 debug,0
+query,Y-GATA-H4=10

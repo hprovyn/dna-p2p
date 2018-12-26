@@ -3,3 +3,4 @@ port,4591
 peerAddress,
 peerPort,
 debug,0
+query,DYS445=6

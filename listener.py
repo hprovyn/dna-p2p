@@ -14,6 +14,7 @@ myport = 4591
 debug_level = 0
 peerAddy = ""
 peerPort = ""
+query = ""
 
 def readConfig():
     a = pd.read_csv("config.txt")
@@ -23,10 +24,14 @@ def readConfig():
     peerAddyIdx = params.index("peerAddress")
     peerPortIdx = params.index("peerPort")
     debugIdx = params.index("debug")
+    queryIdx = params.index("query")
     myport = int(vals[myportIdx])
     peerAddy = vals[peerAddyIdx]
     peerPort = int(vals[peerPortIdx])
     debug_level = int(vals[debugIdx])
+    query = vals[queryIdx]
+
+readConfig()
     
 conn = py2p.MeshSocket("0.0.0.0", myport, debug_level=debug_level, prot=py2p.base.Protocol('mesh', 'SSL'))
 
@@ -35,7 +40,17 @@ if peerAddy != "":
 
 done = False
 
-SNPs = ["Z631","M241", "L283"]
+STRs = {}
+
+def readSTRs():
+    a = pd.read_csv("strs.txt")
+    strNames = a["str"]
+    allelles = a["allelle"]
+    for i in range(len(strNames)):
+        STRs[strNames[i]] = allelles[i]
+
+
+readSTRs()
 
 REPLY_TYPE = 2
 QUERY_TYPE = 0
@@ -50,15 +65,12 @@ while done is not True:
         print(msg)
         msgtype = msg.packets[0]
         if msgtype == QUERY_TYPE:
-            snp = msg.packets[1]
-            print(snp)
-            if snp in SNPs:
+            (the_str, the_allelle) = msg.packets[1].split("=")
+            print(the_str, the_allelle)
+            if the_str in STRs and STRs[the_str] == the_allelle:
                 msg.reply("YES")
             else:
                 msg.reply("NO")
-            if snp == "shutdown":
-                done = True
-            
             print ("STATUS", conn.status)
         if msgtype == REPLY_TYPE:
             print(msg)
@@ -68,6 +80,6 @@ while done is not True:
             print("received ", yesses, " YES", " out of ", received)
 
     if sent == False:
-        conn.send("M241")
+        conn.send(query)
         sent = True
 conn.close()
