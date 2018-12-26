@@ -33,6 +33,7 @@ QUERY_TYPE = 0
 yesses = 0
 received = 0
 sent = False
+time.sleep(3)
 while done is not True:    
     msg = conn.recv()
     if msg is not None:
