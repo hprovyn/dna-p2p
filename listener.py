@@ -8,7 +8,7 @@ Created on Tue Dec 25 07:16:09 2018
 import sys
 import py2p
 import time
-
+import base 
 myport = 4591
 
 outaddy = ""
@@ -18,7 +18,7 @@ if len(sys.argv) > 1:
     
 print(outaddy)
 
-conn = py2p.MeshSocket("0.0.0.0", myport, debug_level=5)
+conn = py2p.MeshSocket("0.0.0.0", myport, debug_level=5, prot=py2p.base.Protocol('mesh', 'SSL'))
 
 if outaddy != "":
     conn.connect(outaddy, 4591)
