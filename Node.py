@@ -8,6 +8,7 @@ Created on Tue Dec 25 08:25:22 2018
 import sys
 import py2p
 
+
 myport = int(sys.argv[1])
 outaddy = ""
 outport = ""
@@ -24,6 +25,7 @@ if len(sys.argv) > 2:
 print("protocol", conn.protocol)
 print('created Node', myport)
 print(conn.status)
+print(conn.id)
 done = False
 while done is not True:
     done = False
