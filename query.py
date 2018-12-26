@@ -9,11 +9,13 @@ import sys
 import py2p
 import time
 
-myport = int(sys.argv[1])
-connport = int(sys.argv[2])
-query = sys.argv[3]
+myport = 4581
+connport = 4591
+
+query = sys.argv[1]
+
 print(myport, connport, query)
-conn = py2p.MeshSocket("localhost", myport)
+conn = py2p.MeshSocket("0.0.0.0", myport)
 
 conn.connect("localhost", connport)
 

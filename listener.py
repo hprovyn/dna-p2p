@@ -8,13 +8,19 @@ Created on Tue Dec 25 07:16:09 2018
 import sys
 import py2p
 
+myport = 4591
 
-myport = int(sys.argv[1])
-connport = int(sys.argv[2])
+outaddy = ""
 
-print(myport, connport)
-conn = py2p.MeshSocket("localhost", myport)
-conn.connect("localhost", connport)
+if len(sys.argv) > 1:
+    outaddy = sys.argv[1]
+    
+print(outaddy)
+
+conn = py2p.MeshSocket("0.0.0.0", myport)
+
+if outaddy != "":
+    conn.connect(outaddy, 4591)
 
 done = False
 
@@ -26,6 +32,7 @@ QUERY_TYPE = 0
 while done is not True:    
     msg = conn.recv()
     if msg is not None:
+        print(msg)
         msgtype = msg.packets[0]
         if msgtype == QUERY_TYPE:
             snp = msg.packets[1]
