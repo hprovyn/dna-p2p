@@ -47,6 +47,8 @@ while done is not True:
             else:
                 time.sleep(5)
                 print('attempting to disconnect', msg.sender)
-                conn.disconnect(conn.routing_table.get(msg.sender))
+                handler = conn.routing_table.get(msg.sender)
+                if handler not None:
+                    conn.disconnect(conn.routing_table.get(msg.sender))
             
 conn.close()
