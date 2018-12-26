@@ -7,6 +7,7 @@ Created on Tue Dec 25 07:16:09 2018
 
 import sys
 import py2p
+import time
 
 myport = 4591
 
@@ -17,7 +18,7 @@ if len(sys.argv) > 1:
     
 print(outaddy)
 
-conn = py2p.MeshSocket("0.0.0.0", myport)
+conn = py2p.MeshSocket("0.0.0.0", myport, debug_level=5)
 
 if outaddy != "":
     conn.connect(outaddy, 4591)
@@ -43,5 +44,9 @@ while done is not True:
                 msg.reply("NO")
             if snp == "shutdown":
                 done = True
+            else:
+                time.sleep(5)
+                print('attempting to disconnect', msg.sender)
+                conn.disconnect(conn.routing_table.get(msg.sender))
             
 conn.close()

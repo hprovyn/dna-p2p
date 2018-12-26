@@ -15,7 +15,7 @@ connport = 4591
 query = sys.argv[1]
 
 print(myport, connport, query)
-conn = py2p.MeshSocket("0.0.0.0", myport)
+conn = py2p.MeshSocket("0.0.0.0", myport, debug_level=5)
 
 conn.connect("localhost", connport)
 
@@ -41,4 +41,10 @@ while done is not True:
     else:
         done = True
 
+#print(conn._get_peer_list())
+#for peer in conn._get_peer_list():
+#    conn.disconnect(conn.routing_table.get(peer[1]))
 print("received ", yesses, " YES", " out of ", received)
+#time.sleep(2)
+#conn.close()
+#time.sleep(2)
