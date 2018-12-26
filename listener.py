@@ -50,5 +50,6 @@ while done is not True:
                 handler = conn.routing_table.get(msg.sender)
                 if handler is not None:
                     conn.disconnect(conn.routing_table.get(msg.sender))
+                    print ("STATUS", conn.status)
             
 conn.close()

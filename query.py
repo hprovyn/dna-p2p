@@ -45,6 +45,8 @@ while done is not True:
 #for peer in conn._get_peer_list():
 #    conn.disconnect(conn.routing_table.get(peer[1]))
 print("received ", yesses, " YES", " out of ", received)
+print ("STATUS", conn.status)
+
 #time.sleep(2)
 #conn.close()
 #time.sleep(2)
