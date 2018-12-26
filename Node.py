@@ -18,6 +18,7 @@ if len(sys.argv) > 4:
     connport = int(sys.argv[5])
 print(myport, outaddy, outport)
 conn = py2p.MeshSocket("localhost", myport, out_addr=(outaddy, outport))
+print("protocol", conn.protocol)
 print('created Node', myport)
 if len(sys.argv) > 4:
     conn.connect(connaddy, connport)
