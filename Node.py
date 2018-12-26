@@ -9,19 +9,21 @@ import sys
 import py2p
 
 myport = int(sys.argv[1])
-outaddy = sys.argv[2]
-outport = int(sys.argv[3])
-connaddy = ""
-connport = ""
-if len(sys.argv) > 4:
-    connaddy = sys.argv[4]
-    connport = int(sys.argv[5])
+outaddy = ""
+outport = ""
+if len(sys.argv) > 2:
+    outaddy = sys.argv[2]
+    outport = int(sys.argv[3])
 print(myport, outaddy, outport)
-conn = py2p.MeshSocket("localhost", myport, out_addr=(outaddy, outport))
+
+conn = py2p.MeshSocket("localhost", myport) #out_addr=(outaddy, outport))
+
+if len(sys.argv) > 2:    
+    conn.connect(outaddy, outport)
+    
 print("protocol", conn.protocol)
 print('created Node', myport)
-if len(sys.argv) > 4:
-    conn.connect(connaddy, connport)
+print(conn.status)
 done = False
 while done is not True:
     done = False
