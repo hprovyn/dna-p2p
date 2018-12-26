@@ -13,8 +13,8 @@ myport = int(sys.argv[1])
 connport = int(sys.argv[2])
 
 print(myport, connport)
-conn = py2p.MeshSocket("0.0.0.0", myport)
-conn.connect("0.0.0.0", connport)
+conn = py2p.MeshSocket("localhost", myport)
+conn.connect("localhost", connport)
 
 done = False
 
