@@ -13,9 +13,9 @@ myport = int(sys.argv[1])
 connport = int(sys.argv[2])
 query = sys.argv[3]
 print(myport, connport, query)
-conn = py2p.MeshSocket("localhost", myport)
+conn = py2p.MeshSocket("0.0.0.0", myport)
 
-conn.connect("localhost", connport)
+conn.connect("0.0.0.0", connport)
 
 time.sleep(5)
 conn.send(query)

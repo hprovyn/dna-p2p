@@ -17,7 +17,7 @@ if len(sys.argv) > 2:
     outport = int(sys.argv[3])
 print(myport, outaddy, outport)
 
-conn = py2p.MeshSocket("localhost", myport) #out_addr=(outaddy, outport))
+conn = py2p.MeshSocket("0.0.0.0", myport) #out_addr=(outaddy, outport))
 
 if len(sys.argv) > 2:    
     conn.connect(outaddy, outport)
