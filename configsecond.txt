@@ -1,6 +1,0 @@
-param,value
-port,4559
-peerAddress,localhost
-peerPort,4591
-debug,0
-query,Y-GATA-H4=10
