@@ -11,28 +11,38 @@ import time
 import pandas as pd
 
 myport = 4591
-debug_level = 0
 peerAddy = ""
-peerPort = ""
+debug_level = 0
 query = ""
+peerPort = ""
 
 def readConfig():
+    global myport
+    global peerAddy
+    global debug_level
+    global query
+    global peerPort
+    
     a = pd.read_csv("config.txt")
     params = a["param"]
     vals = a["value"]
-    myportIdx = params.index("port")
-    peerAddyIdx = params.index("peerAddress")
-    peerPortIdx = params.index("peerPort")
-    debugIdx = params.index("debug")
-    queryIdx = params.index("query")
-    myport = int(vals[myportIdx])
-    peerAddy = vals[peerAddyIdx]
-    peerPort = int(vals[peerPortIdx])
-    debug_level = int(vals[debugIdx])
-    query = vals[queryIdx]
+    for i in range(len(params)):
+        print(params[i], vals[i])
+
+        if params[i] == "port":
+            myport = int(vals[i])
+        if params[i] == "peerAddress" and str(vals[i]) != "nan":
+            peerAddy = vals[i]
+        if params[i] == "peerPort" and str(vals[i]) != "nan":
+            print(vals[i], str(vals[i]))
+            peerPort = int(vals[i])
+        if params[i] == "debug":
+            debug_level = int(vals[i])        
+        if params[i] == "query":
+            query = vals[i]
 
 readConfig()
-    
+
 conn = py2p.MeshSocket("0.0.0.0", myport, debug_level=debug_level, prot=py2p.base.Protocol('mesh', 'SSL'))
 
 if peerAddy != "":
@@ -47,11 +57,11 @@ def readSTRs():
     strNames = a["str"]
     allelles = a["allelle"]
     for i in range(len(strNames)):
-        STRs[strNames[i]] = allelles[i]
+        STRs[strNames[i]] = int(allelles[i])
 
 
 readSTRs()
-
+print(STRs)
 REPLY_TYPE = 2
 QUERY_TYPE = 0
 
@@ -66,11 +76,13 @@ while done is not True:
         msgtype = msg.packets[0]
         if msgtype == QUERY_TYPE:
             (the_str, the_allelle) = msg.packets[1].split("=")
+            intallelle = int(the_allelle)
             print(the_str, the_allelle)
-            if the_str in STRs and STRs[the_str] == the_allelle:
+            if the_str in STRs and STRs[the_str] == intallelle:
                 msg.reply("YES")
             else:
                 msg.reply("NO")
+            print("query for", intallelle)
             print ("STATUS", conn.status)
         if msgtype == REPLY_TYPE:
             print(msg)
