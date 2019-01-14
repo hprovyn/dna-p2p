@@ -4,3 +4,10 @@ peerAddress,localhost
 peerPort,4591
 debug,0
 query,Y-GATA-H4=10
+respondContactInfo,y
+respondAncestorLatLon,y
+respondAncestorBirthYear,y
+contact,me@mail.com
+ancestorLatitude,45.22
+ancestorLongitude,-1.54
+ancestorBirthYear,1840
