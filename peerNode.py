@@ -111,21 +111,46 @@ yesses = 0
 received = 0
 sent = False
 time.sleep(3)
+
+
+def answerQuery(pairs):
+    for pair in pairs:
+        if "=" in pair:
+            (the_str, the_allelle) = pair.split("=")
+            
+            intallelle = int(the_allelle)
+            print(the_str, the_allelle)
+            if the_str not in STRs or STRs[the_str] != intallelle:
+                return False
+        if "<" in pair:
+            (the_str, the_allelle) = pair.split("<")
+            
+            intallelle = int(the_allelle)
+            print(the_str, the_allelle)
+            if the_str not in STRs or STRs[the_str] >= intallelle:
+                return False
+        if ">" in pair:
+            (the_str, the_allelle) = pair.split(">")
+            
+            intallelle = int(the_allelle)
+            print(the_str, the_allelle)
+            if the_str not in STRs or STRs[the_str] <= intallelle:
+                return False
+    return True
+   
 while done is not True:    
     msg = conn.recv()
     if msg is not None:
         print(msg)
         msgtype = msg.packets[0]
         if msgtype == QUERY_TYPE:
-            (the_str, the_allelle) = msg.packets[1].split("=")
-            intallelle = int(the_allelle)
-            print(the_str, the_allelle)
-            if the_str in STRs and STRs[the_str] == intallelle:
+            pairs = msg.packets[1].split(" and ")
+            
+            if answerQuery(pairs):
                 response = getPrivacyCompliantResponse()                
                 msg.reply("YES," + ",".join(response))
             else:
                 msg.reply("NO")
-            print("query for", intallelle)
             print ("STATUS", conn.status)
         if msgtype == REPLY_TYPE:
             print(msg)
