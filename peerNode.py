@@ -8,6 +8,7 @@ Created on Tue Dec 25 07:16:09 2018
 import py2p
 import time
 import pandas as pd
+import datetime
 
 myport = 4591
 peerAddy = ""
@@ -22,7 +23,19 @@ ancestorLat = ""
 ancestorLon = ""
 ancestorBirthYear = ""
 
+def getLogFileName():
+    return "messages_" + datetime.datetime.now().strftime("%Y-%m-%d_%H%M") + ".log"
 
+logFileName = getLogFileName()
+
+def getTimeString():
+    return datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+
+def writeToLogFile(message):
+    f = open(logFileName, "a")
+    f.write(getTimeString() + " " + message + "\r\n")
+    f.close()
+    
 def readConfig():
     global myport
     global peerAddy
@@ -144,22 +157,29 @@ while done is not True:
         print(msg)
         msgtype = msg.packets[0]
         if msgtype == QUERY_TYPE:
-            pairs = msg.packets[1].split(" and ")
+            the_query = msg.packets[1]
+            pairs = the_query.split(" and ")
             
             if answerQuery(pairs):
-                response = getPrivacyCompliantResponse()                
-                msg.reply("YES," + ",".join(response))
+                response = getPrivacyCompliantResponse()
+                responseString = "YES," + ",".join(response)
+                msg.reply(responseString)
+                writeToLogFile("replied " + responseString + " to query " + the_query)
             else:
                 msg.reply("NO")
             print ("STATUS", conn.status)
         if msgtype == REPLY_TYPE:
             print(msg)
-            if msg.packets[1].startswith("YES"):
+            the_response = msg.packets[1]
+            if the_response.startswith("YES"):
                 yesses += 1
+                writeToLogFile("received " + the_response)
             received += 1
             print("received ", yesses, " YES", " out of ", received)
+            
 
     if sent == False:
         conn.send(query)
         sent = True
+        writeToLogFile("sent query " + query)
 conn.close()
