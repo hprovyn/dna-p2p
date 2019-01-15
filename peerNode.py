@@ -50,7 +50,7 @@ def readConfig():
     global ancestorLon
     global ancestorBirthYear
     
-    a = pd.read_csv("config.txt")
+    a = pd.read_table("config.txt")
     params = a["param"]
     vals = a["value"]
     for i in range(len(params)):
@@ -107,12 +107,19 @@ def getPrivacyCompliantResponse():
         response.append("birthyear=" + ancestorBirthYear)
     return response
 
+
+palindromic = ["DYS464"]
+
 def readSTRs():
-    a = pd.read_csv("strs.txt")
+    a = pd.read_table("strs.txt")
     strNames = a["str"]
     allelles = a["allelle"]
     for i in range(len(strNames)):
-        STRs[strNames[i]] = int(allelles[i])
+        if strNames[i] in palindromic:
+            inted = allelles[i]
+        else:
+            inted = int(allelles[i])
+        STRs[strNames[i]] = inted
 
 
 readSTRs()
@@ -125,16 +132,31 @@ received = 0
 sent = False
 time.sleep(3)
 
+PALINDROMIC_DELIMITER = "-"
+
+def palindromeHasValues(my_palindrome, values):
+    for value in values:
+        if value in my_palindrome:
+            my_palindrome.remove(value)
+        else:
+            return False
+    return True
 
 def answerQuery(pairs):
     for pair in pairs:
         if "=" in pair:
             (the_str, the_allelle) = pair.split("=")
-            
-            intallelle = int(the_allelle)
-            print(the_str, the_allelle)
-            if the_str not in STRs or STRs[the_str] != intallelle:
-                return False
+            if the_str in palindromic:
+                thevals = STRs[the_str].split(PALINDROMIC_DELIMITER)
+                the_alleles = the_allelle.split("-")
+                phasvalues = palindromeHasValues(thevals, the_alleles)
+                if phasvalues == False:
+                    return False
+            else:
+                intallelle = int(the_allelle)
+                print(the_str, the_allelle)
+                if the_str not in STRs or STRs[the_str] != intallelle:
+                    return False
         if "<" in pair:
             (the_str, the_allelle) = pair.split("<")
             

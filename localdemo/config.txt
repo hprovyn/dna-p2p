@@ -1,13 +1,13 @@
-param,value
-port,4591
-peerAddress,
-peerPort,4591
-debug,0
-query,Y-GATA-H4=10
-respondContactInfo,y
-respondAncestorLatLon,y
-respondAncestorBirthYear,y
-contact,second@mail.com
-ancestorLatitude,51.22
-ancestorLongitude,4.54
-ancestorBirthYear,1930
+param	value
+port	4591
+peerAddress	
+peerPort	4591
+debug	0
+query	Y-GATA-H4=10
+respondContactInfo	y
+respondAncestorLatLon	y
+respondAncestorBirthYear	y
+contact	second@mail.com
+ancestorLatitude	51.22
+ancestorLongitude	4.54
+ancestorBirthYear	1930
