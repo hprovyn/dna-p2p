@@ -3,7 +3,7 @@ port	4559
 peerAddress	localhost
 peerPort	4591
 debug	0
-query	DYS464=12-15-15
+query	GD(Y-GATA-H4=10,DYS445=6,DYS444=11,DYS464=12-15-15-17)<=7
 respondContactInfo	y
 respondAncestorLatLon	y
 respondAncestorBirthYear	y

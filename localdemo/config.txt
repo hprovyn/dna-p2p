@@ -3,7 +3,7 @@ port	4591
 peerAddress	
 peerPort	4591
 debug	0
-query	Y-GATA-H4=10
+query	GD(Y-GATA-H4=10,DYS445=6,DYS444=11,DYS464=12-15-15-17)<=3
 respondContactInfo	y
 respondAncestorLatLon	y
 respondAncestorBirthYear	y

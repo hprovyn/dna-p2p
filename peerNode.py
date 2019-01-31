@@ -142,6 +142,42 @@ def palindromeHasValues(my_palindrome, values):
             return False
     return True
 
+
+def getPalindromGD(myVals, queryVals):
+    total = 0
+    print(myVals, queryVals)
+    if len(myVals) != len(queryVals):
+        return None
+    for i in range(len(myVals)):
+        total = total + abs(int(myVals[i]) - int(queryVals[i]))
+    return total
+
+def getGD(gdVals):
+    totalGD = 0
+    errorEncountered = False
+    errorMessages = []
+    for gdVal in gdVals:
+        (the_str, the_allelle) = gdVal.split("=")
+        if the_str in palindromic:
+            thevals = STRs[the_str].split(PALINDROMIC_DELIMITER)
+            the_alleles = the_allelle.split("-")
+            palindGD = getPalindromGD(thevals, the_alleles)
+            if palindGD != None:
+                totalGD += palindGD
+            else:
+                errorEncountered = True
+                errorMessages.append(the_str + " length mismatch")
+        else:
+            if the_str not in STRs:
+                errorEncountered = True
+                errorMessages.append(the_str + " no read")
+            else:
+                totalGD += abs(STRs[the_str] - int(the_allelle))
+    if errorEncountered == False:
+        return (True, totalGD)
+    else:
+        return (False, errorMessages)
+    
 def answerQuery(pairs):
     for pair in pairs:
         if "=" in pair:
@@ -180,15 +216,33 @@ while done is not True:
         msgtype = msg.packets[0]
         if msgtype == QUERY_TYPE:
             the_query = msg.packets[1]
-            pairs = the_query.split(" and ")
             
-            if answerQuery(pairs):
-                response = getPrivacyCompliantResponse()
-                responseString = "YES," + ",".join(response)
-                msg.reply(responseString)
-                writeToLogFile("replied " + responseString + " to query " + the_query)
+            if the_query.startswith("GD("):
+                cutoffSplit = the_query[3:].split(")<=")
+                cutoff = int(cutoffSplit[1])
+                gdPairs = cutoffSplit[0].split(",")
+                outcome, gd = getGD(gdPairs)
+                if outcome and gd <= cutoff:
+                    response = getPrivacyCompliantResponse()
+                    responseString = "YES," + ",".join(response)
+                    msg.reply(responseString)
+                    writeToLogFile("replied " + responseString + " to query " + the_query)
+                else:
+                    msg.reply("NO")
+                    if outcome == True:
+                        writeToLogFile("replied NO to query " + the_query + " GD " + str(gd) + " outside cutoff " + str(cutoff))
+                    else:
+                        writeToLogFile("replied NO to query " + the_query + " " + ", ".join(gd))
             else:
-                msg.reply("NO")
+                pairs = the_query.split(" and ")
+                
+                if answerQuery(pairs):
+                    response = getPrivacyCompliantResponse()
+                    responseString = "YES," + ",".join(response)
+                    msg.reply(responseString)
+                    writeToLogFile("replied " + responseString + " to query " + the_query)
+                else:
+                    msg.reply("NO")
             print ("STATUS", conn.status)
         if msgtype == REPLY_TYPE:
             print(msg)

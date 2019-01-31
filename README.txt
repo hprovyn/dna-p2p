@@ -24,6 +24,16 @@ to execute locally:
 ***Y-STR Query Syntax
 -------------------------------------------------
 
+1) OPERATOR QUERY
+
 Query can contain unlimited AND clauses containing "=", "<", or ">" logical operators
 
 $STR_NAME1<$VALUE1 and $STR_NAME2=$VALUE2 and ...
+
+2) GENETIC DISTANCE QUERY
+
+Can query to find those with genetic distance less than or equal to a cutoff
+
+GD($STR_NAME1=$VALUE1,$STR_NAME2=$VALUE2, ...)<=$CUTOFF
+
+example: GD(Y-GATA-H4=10,DYS445=6,DYS444=11,DYS464=12-15-15-17)<=3
